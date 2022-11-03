@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotBlank;
 
+import id.ist.training.contact.entity.Contact.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,10 +17,6 @@ import lombok.NoArgsConstructor;
 public class ContactDto implements Serializable {
 	
 	private static final long serialVersionUID = -5238915463812109415L;
-	
-	public enum Gender {
-		FEMALE, MALE;
-	}
 	
 	@NotBlank(message = "Name is mandatory")
 	private String name;

@@ -3,12 +3,12 @@ package id.ist.training.contact.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import id.ist.training.contact.entity.Contact;
 import id.ist.training.contact.entity.Contact.Gender;
 import id.ist.training.contact.exception.ContactNotFoundException;
+import id.ist.training.contact.util.ObjectUtils;
 
 @Service
 public class ContactService {
@@ -51,7 +51,7 @@ public class ContactService {
 
 	public void update(Long id, Contact updateContact) {
 		Contact contact = findById(id);
-		BeanUtils.copyProperties(updateContact, contact);
+		ObjectUtils.copyProperties(contact, updateContact);
 	}
 
 	public void deleteById(Long id) {

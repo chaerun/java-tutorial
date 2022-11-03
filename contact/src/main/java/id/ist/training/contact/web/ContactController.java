@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +28,7 @@ import id.ist.training.contact.dto.ContactDto;
 import id.ist.training.contact.entity.Contact;
 import id.ist.training.contact.exception.InvalidDataException;
 import id.ist.training.contact.service.ContactService;
+import id.ist.training.contact.util.ObjectUtils;
 
 @RestController
 @RequestMapping(path = "/contacts")
@@ -55,7 +55,7 @@ public class ContactController {
 	public Long create(@Valid @RequestBody ContactDto contactDto) {
 		Objects.requireNonNull(contactDto);
 		Contact contact = new Contact();
-		BeanUtils.copyProperties(contactDto, contact);
+		ObjectUtils.copyProperties(contact, contactDto);
 		return service.create(contact);
 	}
 
@@ -64,7 +64,7 @@ public class ContactController {
 	public void update(@PathVariable Long id, @RequestBody ContactDto contactDto) {
 		Objects.requireNonNull(contactDto);
 		Contact contact = new Contact();
-		BeanUtils.copyProperties(contactDto, contact);
+		ObjectUtils.copyProperties(contact, contactDto);
 		service.update(id, contact);
 	}
 
