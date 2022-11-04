@@ -29,7 +29,9 @@ import id.ist.training.contact.entity.Contact;
 import id.ist.training.contact.exception.InvalidDataException;
 import id.ist.training.contact.service.ContactService;
 import id.ist.training.contact.util.ObjectUtils;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping(path = "/contacts")
 public class ContactController {
@@ -72,11 +74,13 @@ public class ContactController {
 	public Contact updateCustomer(@PathVariable Long id, @RequestBody JsonPatch patch) {
 		try {
 			Contact contact = service.findById(id);
-			JsonNode patched = patch.apply(objectMapper.convertValue(contact, JsonNode.class));
-			Contact patchedContact = objectMapper.treeToValue(patched, Contact.class);
-			service.update(id, patchedContact);
-			return patchedContact;
+			ContactDto patchedDto = applyPatch(patch, contact, ContactDto.class);
+			ObjectUtils.copyProperties(contact, patchedDto);
+			
+			service.update(id, contact);
+			return contact;
 		} catch (JsonPatchException | JsonProcessingException e) {
+			log.error(e.toString(), e);
 			throw new InvalidDataException();
 		}
 	}
@@ -85,6 +89,13 @@ public class ContactController {
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable("id") Long id) {
 		service.deleteById(id);
+	}
+	
+	public <T, R> R applyPatch(JsonPatch patch, T origObj, Class<R> classResult)
+			throws JsonPatchException, JsonProcessingException, IllegalArgumentException {
+		JsonNode contactDtoNode = objectMapper.convertValue(origObj, JsonNode.class);
+		JsonNode patched = patch.apply(contactDtoNode);
+		return objectMapper.treeToValue(patched, classResult);
 	}
 
 }
