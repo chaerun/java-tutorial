@@ -54,7 +54,7 @@ public class ContactController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Long create(@Valid @RequestBody ContactDto contactDto) {
+	public Long create(@Valid @RequestBody Contact contactDto) {
 		Objects.requireNonNull(contactDto);
 		Contact contact = new Contact();
 		ObjectUtils.copyProperties(contact, contactDto);
@@ -63,7 +63,7 @@ public class ContactController {
 
 	@PutMapping(path = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public void update(@PathVariable Long id, @RequestBody ContactDto contactDto) {
+	public void update(@PathVariable Long id, @RequestBody Contact contactDto) {
 		Objects.requireNonNull(contactDto);
 		Contact contact = new Contact();
 		ObjectUtils.copyProperties(contact, contactDto);
